@@ -109,6 +109,7 @@ struct fm_cbk_tbl {
     int (*is_rdsrx_support)(int fd, int *supt);
     int (*turn_on_off_rds)(int fd, int onoff);
     int (*get_chip_id)(int fd, int *chipid);
+    int (*get_rssi)(int fd, int *rssi);
     //FOR RDS RX.
     int (*read_rds_data)(int fd, RDSData_Struct *rds, uint16_t *rds_status);
     int (*get_ps)(int fd, RDSData_Struct *rds, uint8_t **ps, int *ps_len);

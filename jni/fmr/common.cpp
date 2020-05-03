@@ -407,6 +407,22 @@ int COM_get_chip_id(int fd, int *chipid)
     return ret;
 }
 
+int COM_get_rssi(int fd, int *rssi)
+{
+    int ret = 0;
+    int32_t tmp = 0;
+
+    FMR_ASSERT(rssi);
+
+    ret = ioctl(fd, FM_IOCTL_GETRSSI, &tmp);
+    *rssi = (int)tmp;
+    if (ret) {
+        LOGE("%s, failed\n", __func__);
+    }
+    LOGD("%s, [fd=%d] [rssi=%x] [ret=%d]\n", __func__, fd, *rssi, ret);
+    return ret;
+}
+
 int COM_read_rds_data(int fd, RDSData_Struct *rds, uint16_t *rds_status)
 {
     int ret = 0;
@@ -428,7 +444,7 @@ int COM_read_rds_data(int fd, RDSData_Struct *rds, uint16_t *rds_status)
         return ret;
     } else {
         //LOGE("readrds get no event\n");
-        ret = -ERR_RDS_NO_DATA;
+       ret = -ERR_RDS_NO_DATA;
     }
     return ret;
 }
@@ -568,11 +584,13 @@ void FM_interface_init(struct fm_cbk_tbl *cbk_tbl)
     cbk_tbl->close_dev = COM_close_dev;
     cbk_tbl->pwr_up = COM_pwr_up;
     cbk_tbl->pwr_down = COM_pwr_down;
+    cbk_tbl->seek = COM_seek;
     cbk_tbl->tune = COM_tune;
     cbk_tbl->set_mute = COM_set_mute;
     cbk_tbl->is_rdsrx_support = COM_is_rdsrx_support;
     cbk_tbl->turn_on_off_rds = COM_turn_on_off_rds;
     cbk_tbl->get_chip_id = COM_get_chip_id;
+    cbk_tbl->get_rssi = COM_get_rssi;
     //For RDS RX.
     cbk_tbl->read_rds_data = COM_read_rds_data;
     cbk_tbl->get_ps = COM_get_ps;

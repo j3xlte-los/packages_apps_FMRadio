@@ -16,6 +16,10 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
+ifeq ($(BOARD_SPRD_WCNBT_MARLIN), true)
+    LOCAL_CFLAGS := -DSPRD_WCN_MARLIN
+endif
+
 LOCAL_SRC_FILES := \
     fmr_core.cpp \
     fmr_err.cpp \
